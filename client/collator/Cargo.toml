@@ -14,10 +14,10 @@ sp-api = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v
 sc-client-api = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.7" }
 
 # Polkadot dependencies
-polkadot-primitives = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.7" }
-polkadot-node-primitives = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.7" }
-polkadot-overseer = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.7" }
-polkadot-node-subsystem = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.7" }
+polkadot-primitives = { git = "https://github.com/patractlabs/polkadot", branch = "release-v0.9.7-sandbox" }
+polkadot-node-primitives = { git = "https://github.com/patractlabs/polkadot", branch = "release-v0.9.7-sandbox" }
+polkadot-overseer = { git = "https://github.com/patractlabs/polkadot", branch = "release-v0.9.7-sandbox" }
+polkadot-node-subsystem = { git = "https://github.com/patractlabs/polkadot", branch = "release-v0.9.7-sandbox" }
 
 # Cumulus dependencies
 cumulus-client-network = { path = "../network" }
@@ -32,7 +32,7 @@ tracing = "0.1.25"
 
 [dev-dependencies]
 # Polkadot dependencies
-polkadot-node-subsystem-test-helpers = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.7" }
+polkadot-node-subsystem-test-helpers = { git = "https://github.com/patractlabs/polkadot", branch = "release-v0.9.7-sandbox" }
 
 # Cumulus dependencies
 cumulus-test-runtime = { path = "../../test/runtime" }

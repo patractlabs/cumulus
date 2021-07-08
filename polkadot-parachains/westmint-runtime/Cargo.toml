@@ -65,12 +65,12 @@ pallet-collator-selection = { path = "../../pallets/collator-selection", default
 statemint-common = { path = "../statemint-common", default-features = false }
 
 # Polkadot dependencies
-polkadot-parachain = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "release-v0.9.7" }
-polkadot-runtime-common = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "release-v0.9.7" }
-xcm = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "release-v0.9.7" }
-xcm-builder = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "release-v0.9.7" }
-xcm-executor = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "release-v0.9.7" }
-pallet-xcm = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "release-v0.9.7" }
+polkadot-parachain = { git = "https://github.com/patractlabs/polkadot", default-features = false, branch = "release-v0.9.7-sandbox" }
+polkadot-runtime-common = { git = "https://github.com/patractlabs/polkadot", default-features = false, branch = "release-v0.9.7-sandbox" }
+xcm = { git = "https://github.com/patractlabs/polkadot", default-features = false, branch = "release-v0.9.7-sandbox" }
+xcm-builder = { git = "https://github.com/patractlabs/polkadot", default-features = false, branch = "release-v0.9.7-sandbox" }
+xcm-executor = { git = "https://github.com/patractlabs/polkadot", default-features = false, branch = "release-v0.9.7-sandbox" }
+pallet-xcm = { git = "https://github.com/patractlabs/polkadot", default-features = false, branch = "release-v0.9.7-sandbox" }
 
 [dev-dependencies]
 hex-literal = "0.3.1"

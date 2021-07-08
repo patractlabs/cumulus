@@ -73,6 +73,7 @@ pub fn get_chain_spec(id: ParaId) -> ChainSpec {
 				vec![
 					get_from_seed::<AuraId>("Alice"),
 					get_from_seed::<AuraId>("Bob"),
+					// get_from_seed::<AuraId>("Charlie"),
 				],
 				vec![
 					get_account_id_from_seed::<sr25519::Public>("Alice"),
@@ -96,7 +97,8 @@ pub fn get_chain_spec(id: ParaId) -> ChainSpec {
 		None,
 		None,
 		Extensions {
-			relay_chain: "westend".into(),
+			// relay_chain: "rococo-local".into(),
+			relay_chain: "westend-local".into(),
 			para_id: id.into(),
 		},
 	)
