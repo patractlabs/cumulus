@@ -21,7 +21,7 @@ use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use sc_service::ChainType;
 use serde::{Deserialize, Serialize};
 use sp_core::{crypto::UncheckedInto, sr25519, Pair, Public};
-use sp_runtime::traits::{IdentifyAccount, Verify};
+use sp_runtime::traits::{IdentifyAccount, Verify, Zero};
 
 /// Specialized `ChainSpec` for the normal parachain runtime.
 pub type ChainSpec = sc_service::GenericChainSpec<rococo_parachain_runtime::GenesisConfig, Extensions>;
@@ -655,25 +655,19 @@ pub fn westmint_config(id: ParaId) -> WestmintChainSpec {
 			westmint_genesis(
 				// initial collators.
 				vec![(
-						 hex!("9cfd429fa002114f33c1d3e211501d62830c9868228eb3b4b8ae15a83de04325").into(),
-						 hex!("9cfd429fa002114f33c1d3e211501d62830c9868228eb3b4b8ae15a83de04325").unchecked_into()
+						 hex!("d00924bf70485b60cccca1bd4f53cd068465cb0d0d9402b1bdf70d91a804de03").into(),
+						 hex!("9246ea3760bd5995b7df73b4e54eba8f9cbec01de70cdfdb98ff7f74be1feb7e").unchecked_into()
 					 ),
 					 (
-						 hex!("12a03fb4e7bda6c9a07ec0a11d03c24746943e054ff0bb04938970104c783876").into(),
-						 hex!("12a03fb4e7bda6c9a07ec0a11d03c24746943e054ff0bb04938970104c783876").unchecked_into()
-					 ),
-					 (
-						 hex!("1256436307dfde969324e95b8c62cb9101f520a39435e6af0f7ac07b34e1931f").into(),
-						 hex!("1256436307dfde969324e95b8c62cb9101f520a39435e6af0f7ac07b34e1931f").unchecked_into()
-					 ),
-					 (
-						 hex!("98102b7bca3f070f9aa19f58feed2c0a4e107d203396028ec17a47e1ed80e322").into(),
-						 hex!("98102b7bca3f070f9aa19f58feed2c0a4e107d203396028ec17a47e1ed80e322").unchecked_into()
+						 hex!("041baeda23b51b3fd34aad06d9c204c8e3b7209eb8fde44c39c56919051b1b46").into(),
+						 hex!("102802c62814ca654be861a18ba340fb7bc1b6eb94739a84086d35ad4f09a82e").unchecked_into()
 					 ),
 				],
-				vec![],
+				vec![
+					hex!("30e6e09d0d109ecac2a538bc9dcac3308dd4e0b01035647b9865adeff7165477").into()
+				],
 				// re-use the Westend sudo key
-				hex!("6648d7f3382690650c681aba1b993cd11e54deb4df21a3a18c3e2177de9f7342").into(),
+				hex!("30e6e09d0d109ecac2a538bc9dcac3308dd4e0b01035647b9865adeff7165477").into(),
 				id,
 			)
 		},
@@ -712,7 +706,8 @@ fn westmint_genesis(
 		parachain_info: westmint_runtime::ParachainInfoConfig { parachain_id: id },
 		collator_selection: westmint_runtime::CollatorSelectionConfig {
 			invulnerables: invulnerables.iter().cloned().map(|(acc, _)| acc).collect(),
-			candidacy_bond: WESTMINT_ED * 16,
+			// candidacy_bond: WESTMINT_ED * 16,
+			candidacy_bond: Zero::zero(),
 			..Default::default()
 		},
 		session: westmint_runtime::SessionConfig {
