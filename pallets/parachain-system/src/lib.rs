@@ -897,18 +897,21 @@ impl<T: Config> Pallet<T> {
 
 	/// The implementation of the runtime upgrade functionality for parachains.
 	fn set_code_impl(validation_function: Vec<u8>) -> DispatchResult {
+		log::info!(target: "Parachain", "set code begin");
 		ensure!(
 			!<PendingValidationCode<T>>::exists(),
 			Error::<T>::OverlappingUpgrades
 		);
 		let vfp = Self::validation_data().ok_or(Error::<T>::ValidationDataNotAvailable)?;
 		let cfg = Self::host_configuration().ok_or(Error::<T>::HostConfigurationNotAvailable)?;
+		log::info!(target: "Parachain", "set code get data");
 		ensure!(
 			validation_function.len() <= cfg.max_code_size as usize,
 			Error::<T>::TooBig
 		);
 		let apply_block =
 			Self::code_upgrade_allowed(&vfp, &cfg).ok_or(Error::<T>::ProhibitedByPolkadot)?;
+		log::info!(target: "Parachain", "set code apply block in:{}", apply_block);
 
 		// When a code upgrade is scheduled, it has to be applied in two
 		// places, synchronized: both polkadot and the individual parachain
