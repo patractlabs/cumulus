@@ -73,6 +73,8 @@ pub mod pallet {
 		type AccountId: From<<Self as SystemConfig>::AccountId>;
 
 		type SendXcmOrigin: EnsureOrigin<<Self as SystemConfig>::Origin, Success=MultiLocation>;
+
+		type UnitWeightCost: Get<u64>;
 	}
 
 	/// The target parachains to ping.
@@ -349,6 +351,82 @@ pub mod pallet {
 		// 	Ok(())
 		// }
 
+		#[pallet::weight(0)]
+		pub fn test_transfer_to_relaychain(origin: OriginFor<T>, some_value: u128, weight: u64) -> DispatchResult {
+
+			let origin_location:MultiLocation = T::SendXcmOrigin::ensure_origin(origin)?;
+
+			let account_location = origin_location.first().ok_or_else(|| Error::<T>::PingError)?;
+
+			let account_32 = &*(account_location);
+			log::info!("account info:{:?}", account_32);
+
+			let msg = Xcm::WithdrawAsset {
+				assets:vec![MultiAsset::ConcreteFungible {
+					id: MultiLocation::X1(Junction::Parent),
+					amount: some_value
+				}],
+				effects: vec![
+					Order::BuyExecution {
+						fees: MultiAsset::All,
+						weight: 0,
+						debt: weight,
+						halt_on_error: false,
+						xcm: vec![]
+					},
+					Order::InitiateReserveWithdraw {
+						assets: vec![MultiAsset::All],
+						reserve: MultiLocation::X1(Junction::Parent),
+						effects: vec![
+							Order::BuyExecution {
+								fees: MultiAsset::All,
+								weight: 0,
+								debt: weight,
+								halt_on_error: false,
+								xcm: vec![]
+							},
+							Order::DepositAsset {
+								assets: vec![MultiAsset::All],
+								dest: MultiLocation::X1(account_32.clone()),
+							},
+
+						]
+					}
+				]
+			};
+
+			// 2021-07-26 16:24:42.149  INFO tokio-runtime-worker ping: [Parachain] Test downward transfer WithdrawAsset {
+			//   assets: [ConcreteFungible { id: Null, amount: 1000 }],
+			//   effects: [DepositReserveAsset {
+			//     assets: [All], dest: X1(Parachain(2000)),
+			//     effects: [DepositAsset {
+			//       assets: [All],
+			//       dest: X1(AccountId32 { network: Named([87, 101, 115, 116, 101, 110, 100]), id: [212, 53, 147, 199, 21, 253, 211, 28, 97, 20, 26, 189, 4, 169, 159, 214, 130, 44, 133, 88, 133, 76, 205, 227, 154, 86, 132, 231, 165, 109, 162, 125] }) }] }] }
+			log::info!(
+				target: "ping",
+				"Test upward transfer {:?}",
+				msg,
+			);
+
+			match T::XcmSender::send_xcm(MultiLocation::X1(Junction::Parent), msg) {
+				Ok(()) => {
+					Self::deposit_event(Event::TestMsg(some_value as u32));
+					log::info!(
+						target: "ping",
+						"Test pallet transact sent success!"
+					);
+				},
+				Err(e) => {
+					Self::deposit_event(Event::ErrorSendingTest());
+					log::error!(
+						target: "ping",
+						"Test pallet transact sent failed:{:?}",
+						e,
+					);
+				}
+			}
+			Ok(())
+		}
 
 		#[pallet::weight(0)]
 		pub fn test_upward_downward_transfer(origin: OriginFor<T>, some_value: u128) -> DispatchResult {
@@ -401,6 +479,69 @@ pub mod pallet {
 					log::error!(
 						target: "ping",
 						"Test pallet transact sent failed:{:?}",
+						e,
+					);
+				}
+			}
+			Ok(())
+		}
+
+		#[pallet::weight(0)]
+		pub fn test_upward_withdraw_teleport_downward_transfer(origin: OriginFor<T>, some_value: u128) -> DispatchResult {
+			let origin_location:MultiLocation = T::SendXcmOrigin::ensure_origin(origin)?;
+			let account_location = origin_location.first().ok_or_else(|| Error::<T>::PingError)?;
+			let account_32 = &*(account_location);
+			let para_id = T::SelfParaId::get().into();
+			let debt = T::UnitWeightCost::get() * 10;
+			let msg = Xcm::WithdrawAsset {
+				assets:vec![MultiAsset::ConcreteFungible { id: MultiLocation::Null, amount: some_value }],
+				effects: vec![
+					Order::BuyExecution {
+						fees: MultiAsset::All,
+						weight: 0,
+						debt,
+						halt_on_error: false,
+						xcm: vec![]
+					},
+					Order::InitiateTeleport {
+						assets: vec![MultiAsset::All],
+						dest: MultiLocation::X1(Junction::Parachain(para_id)),
+						effects: vec![
+							Order::BuyExecution {
+								fees: MultiAsset::All,
+								weight: 0,
+								debt,
+								halt_on_error: false,
+								xcm: vec![]
+							},
+							Order::DepositAsset {
+								assets: vec![MultiAsset::All],
+								dest: MultiLocation::X1(account_32.clone()),
+							},
+						]
+					}
+				]
+			};
+
+			log::info!(
+				target: "ping",
+				"upward&downward transfer {:?}",
+				msg,
+			);
+
+			match T::XcmSender::send_xcm(MultiLocation::X1(Junction::Parent), msg) {
+				Ok(()) => {
+					Self::deposit_event(Event::TestMsg(some_value as u32));
+					log::info!(
+						target: "ping",
+						"upward&downward transfer sent success!"
+					);
+				},
+				Err(e) => {
+					Self::deposit_event(Event::ErrorSendingTest());
+					log::error!(
+						target: "ping",
+						"upward&downward transfer sent failed:{:?}",
 						e,
 					);
 				}

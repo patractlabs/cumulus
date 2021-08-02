@@ -78,6 +78,10 @@ use xcm_builder::{
 };
 use xcm_executor::{Config, XcmExecutor};
 
+use sp_std::marker::PhantomData;
+use frame_support::traits::Contains;
+use xcm_executor::traits::{ShouldExecute, FilterAssetLocation};
+
 /// Opaque types. These are used by the CLI to instantiate machinery that don't need to know
 /// the specifics of the runtime. They can then be made to be agnostic over specific formats
 /// of data like extrinsics, allowing for them to continue syncing the network through upgrades
@@ -475,11 +479,59 @@ match_type! {
 	};
 }
 
+/// Transparent XcmTransact Barrier for sybil demo. Polkadot will probably come up with a
+/// better solution for this. Currently, they have not setup a barrier config for `XcmTransact`
+pub struct AllowXcmTransactFrom<T>(PhantomData<T>);
+impl<T: Contains<MultiLocation>> ShouldExecute for AllowXcmTransactFrom<T> {
+	fn should_execute<Call>(
+		_origin: &MultiLocation,
+		_top_level: bool,
+		message: &Xcm<Call>,
+		_shallow_weight: Weight,
+		_weight_credit: &mut Weight,
+	) -> Result<(), ()> {
+		match message {
+			Xcm::Transact { origin_type: _ , require_weight_at_most: _, call: _ } => Ok(()),
+			_ => Err(())
+		}
+	}
+}
+
+pub struct CrosschainConcreteAsset;
+impl FilterAssetLocation for CrosschainConcreteAsset {
+	fn filter_asset_location(asset: &MultiAsset, origin: &MultiLocation) -> bool {
+		use xcm::v0::{
+			MultiAsset::{All, ConcreteFungible}, Junction::*,
+			MultiLocation::*
+		};
+		match asset {
+			MultiAsset::ConcreteFungible {..} => {
+				match origin {
+					Null | X1(Plurality { .. }) => true,
+					X1(AccountId32 { .. }) => true,
+					X1(Parent { .. }) => true,
+					X1(Parachain { .. }) => true,
+					X2(Parachain{..}, _ ) => true,
+					X2(Parent{..}, _ ) => true,
+					_ => false
+				}
+			},
+			_ => false
+		}
+	}
+}
+
+pub type CrosschainAsset = (
+	NativeAsset,
+	CrosschainConcreteAsset,
+);
+
 pub type Barrier = (
 	TakeWeightCredit,
 	AllowTopLevelPaidExecutionFrom<All<MultiLocation>>,
 	AllowUnpaidExecutionFrom<ParentOrParentsPlurality>,
 	// ^^^ Parent & its plurality gets free execution
+	AllowXcmTransactFrom<All<MultiLocation>>
 );
 
 pub struct XcmConfig;
@@ -489,8 +541,8 @@ impl Config for XcmConfig {
 	// How to withdraw and deposit an asset.
 	type AssetTransactor = LocalAssetTransactor;
 	type OriginConverter = XcmOriginToTransactDispatchOrigin;
-	type IsReserve = NativeAsset;
-	type IsTeleporter = NativeAsset; // <- should be enough to allow teleportation of WND
+	type IsReserve = CrosschainAsset;
+	type IsTeleporter = CrosschainAsset; // <- should be enough to allow teleportation of WND
 	type LocationInverter = LocationInverter<Ancestry>;
 	type Barrier = ();
 	type Weigher = FixedWeightBounds<UnitWeightCost, Call>;
@@ -602,6 +654,7 @@ impl cumulus_ping::Config for Runtime {
 	type SelfParaId = parachain_info::Pallet<Runtime>;
 	type AccountId = sp_runtime::AccountId32;
 	type SendXcmOrigin = EnsureXcmOrigin<Origin, LocalOriginToLocation>;
+	type UnitWeightCost = UnitWeightCost;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.

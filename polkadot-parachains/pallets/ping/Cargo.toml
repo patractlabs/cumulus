@@ -14,7 +14,7 @@ sp-runtime = { git = "https://github.com/paritytech/substrate", default-features
 frame-support = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.8" }
 frame-system = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.8" }
 
-xcm = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-098", default-features = false }
+xcm = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp", default-features = false }
 
 cumulus-primitives-core = { path = "../../../primitives/core", default-features = false }
 cumulus-pallet-xcm = { path = "../../../pallets/xcm", default-features = false }

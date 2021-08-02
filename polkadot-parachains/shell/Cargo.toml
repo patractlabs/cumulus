@@ -35,10 +35,10 @@ cumulus-pallet-dmp-queue = { path = "../../pallets/dmp-queue", default-features 
 cumulus-pallet-xcm = { path = "../../pallets/xcm", default-features = false }
 
 # Polkadot dependencies
-polkadot-parachain = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-098", default-features = false }
-xcm = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-098", default-features = false }
-xcm-builder = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-098", default-features = false }
-xcm-executor = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-098", default-features = false }
+polkadot-parachain = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp", default-features = false }
+xcm = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp", default-features = false }
+xcm-builder = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp", default-features = false }
+xcm-executor = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp", default-features = false }
 
 [dev-dependencies]
 hex = "0.4.3"

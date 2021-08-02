@@ -48,11 +48,11 @@ cumulus-pallet-xcm = { path = "../../pallets/xcm", default-features = false }
 cumulus-ping = { path = "../pallets/ping", default-features = false }
 
 # Polkadot dependencies
-polkadot-parachain = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-098", default-features = false }
-xcm = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-098", default-features = false }
-xcm-builder = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-098", default-features = false }
-xcm-executor = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-098", default-features = false }
-pallet-xcm = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-098", default-features = false }
+polkadot-parachain = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp", default-features = false }
+xcm = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp", default-features = false }
+xcm-builder = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp", default-features = false }
+xcm-executor = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp", default-features = false }
+pallet-xcm = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp", default-features = false }
 
 [dev-dependencies]
 hex-literal = "0.3.1"
