@@ -142,6 +142,7 @@ where
 			sc_consensus_aura::build_aura_worker::<P, _, _, _, _, _, _, _, _>(BuildAuraWorkerParams {
 				client: para_client,
 				block_import: ParachainBlockImport::new(block_import),
+				justification_sync_link: (),
 				proposer_factory,
 				sync_oracle,
 				force_authoring,
@@ -149,7 +150,6 @@ where
 				keystore,
 				telemetry,
 				block_proposal_slot_portion,
-				justification_sync_link: (),
 				max_block_proposal_slot_portion,
 			});
 
