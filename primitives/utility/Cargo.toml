@@ -12,10 +12,10 @@ sp-trie = { git = "https://github.com/paritytech/substrate", default-features = 
 frame-support = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.8" }
 
 # Polkadot dependencies
-polkadot-parachain = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp", default-features = false }
-polkadot-primitives = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp", default-features = false }
-polkadot-core-primitives = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp", default-features = false }
-xcm = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp", default-features = false }
+polkadot-parachain = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp-compact", default-features = false }
+polkadot-primitives = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp-compact", default-features = false }
+polkadot-core-primitives = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp-compact", default-features = false }
+xcm = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp-compact", default-features = false }
 
 cumulus-primitives-core = { path = "../core", default-features = false }
 

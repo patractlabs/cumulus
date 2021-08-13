@@ -25,9 +25,9 @@ sp-core = { git = "https://github.com/paritytech/substrate", branch = "polkadot-
 sp-blockchain = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.8" }
 
 # Polkadot dependencies
-polkadot-primitives = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp" }
-polkadot-service = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp" }
-polkadot-overseer = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp" }
+polkadot-primitives = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp-compact" }
+polkadot-service = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp-compact" }
+polkadot-overseer = { git = "https://github.com/patractlabs/polkadot", branch = "patract-sandbox-xcmp-compact" }
 
 # Other deps
 tracing = "0.1.22"
