@@ -77,7 +77,7 @@ where
 		Some(parent_head.state_root()),
 	) {
 		Ok(root) => root,
-		Err(_) => panic!("Compact proof decoding failure."),
+		Err(e) => panic!("Compact proof decoding failure. {}", e),
 	};
 	sp_std::mem::drop(storage_proof);
 
