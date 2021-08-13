@@ -77,7 +77,13 @@ where
 		Some(parent_head.state_root()),
 	) {
 		Ok(root) => root,
-		Err(e) => panic!("Compact proof decoding failure. {}", e),
+		Err(sp_trie::CompactProofError::IncompleteProof) => panic!("valid_IncompleteProof"),
+		Err(sp_trie::CompactProofError::RootMismatch(r1, r2)) => panic!("valid_RootMismatch:{:?}, {:?}", r1, r2),
+		Err(sp_trie::CompactProofError::ExtraneousChildNode) => panic!("valid_ExtraneousChildNode"),
+		Err(sp_trie::CompactProofError::ExtraneousChildProof(r)) => panic!("valid_ExtraneousChildProof:{:?}", r),
+		Err(sp_trie::CompactProofError::InvalidChildRoot(r1, r2)) => panic!("valid_InvalidChildRoot:{:?}, {:?}", r1, r2),
+		Err(sp_trie::CompactProofError::TrieError(r)) => panic!("valid_TrieError:{:?}", r.as_ref()),
+		Err(e) => panic!("Compact proof decoding failure."),
 	};
 	sp_std::mem::drop(storage_proof);
 
